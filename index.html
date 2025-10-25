@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Электронный каталог профориентации — РГСУ</title>
+
+  <!-- Шрифты и стили -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Шапка (фон как у сайта, не фиксируется) -->
+  <header>
+    <a href="https://rgsu.net" target="_blank" aria-label="Сайт РГСУ">
+      <img src="RGSU_logo.png" alt="РГСУ" />
+    </a>
+    <nav>
+      <a href="#top">Главная</a>
+      <a href="test.html">Тест</a>
+      <a href="#groups">Профессии</a>
+      <a href="#docs">Документация</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+  </header>
+
+  <!-- Якорь для «вверх» -->
+  <div id="top"></div>
+
+  <!-- Герой-блок -->
+  <section class="hero">
+    <h1>Электронный каталог профориентации и компетенций</h1>
+    <p>Проект Технопарка РГСУ помогает участникам СВО выбрать профессию и пройти переобучение.</p>
+    <div class="cta-buttons">
+      <button onclick="location.href='test.html'">Пройти тест</button>
+    </div>
+  </section>
+
+  <!-- 10 укрупнённых групп (заполняются из Google Sheets) -->
+  <section id="groups" class="groups" aria-live="polite">
+    <div class="groups-loader">Загружаем группы…</div>
+    <noscript>Включите JavaScript, чтобы увидеть список групп.</noscript>
+  </section>
+
+  <!-- Документация -->
+  <section id="docs" class="docs">
+    <h2>Документация проекта</h2>
+    <p>
+      <a href="https://docs.google.com/document/d/1jiqOJaLIP69--rHwd2fUKjbMGagBtJ48_iSaf6ze8OU/edit" target="_blank" rel="noopener">Сборник профессий (10×5)</a> |
+      <a href="https://docs.google.com/document/d/1Ua8hlPDV8sSOosvaknSZWzbh4o_L3i7O/edit" target="_blank" rel="noopener">Сборник компетенций (ТОП-50)</a>
+    </p>
+  </section>
+
+  <!-- Подвал -->
+  <footer id="contacts">
+    <p>© 2025 Технопарк РГСУ | <a href="mailto:info@rgsu.net">info@rgsu.net</a></p>
+    <p>г. Москва, ул. Вильгельма Пика, д. 4, корп. 1</p>
+  </footer>
+
+  <!-- Кнопка «наверх» -->
+  <button id="toTop" class="to-top" aria-label="Вернуться к началу страницы" title="Наверх">▲</button>
+
+  <!-- Скрипт -->
+  <script src="script.js"></script>
+
+  <!-- Конфигурация: ID вашей Google Таблицы -->
+  <script>
+    // ID берём из URL Google Sheets: .../spreadsheets/d/ID_ЗДЕСЬ/edit
+    window.GSHEET_ID = "1eJyocvC47_MoC2fNYycTEjOxmPSxT7UM3-7Du9-dcEA";
+    window.SHEET_GROUPS = "Группы";
+    window.SHEET_PROFESSIONS = "Профессии";
+  </script>
+</body>
+</html>
