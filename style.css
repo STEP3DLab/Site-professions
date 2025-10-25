@@ -408,3 +408,49 @@ button:focus-visible,
   .prof-title { font-size: 1.7rem; }
   .profession-card { padding: 1.2rem 1rem 1.3rem; }
 }
+
+/* ======= Заглушка теста ======= */
+.test-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-placeholder {
+  flex: 1;
+  max-width: 760px;
+  margin: 3rem auto 4rem;
+  padding: 2.5rem 2rem;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 76, 153, 0.12);
+  text-align: center;
+}
+
+.test-placeholder h1 {
+  margin-top: 0;
+  font-size: 2.1rem;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.test-placeholder p {
+  font-size: 1.05rem;
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .test-placeholder {
+    margin: 2rem 1.25rem 3rem;
+    padding: 2rem 1.25rem;
+  }
+
+  .test-placeholder h1 {
+    font-size: 1.75rem;
+  }
+
+  .test-placeholder p {
+    font-size: 1rem;
+  }
+}
