@@ -24,7 +24,7 @@ header {
   background: transparent;          /* <— фон как у сайта */
   backdrop-filter: none;
   border-bottom: none;
-  position: static;                 /* <— не закрепляется */
+  position: relative;               /* <— не закрепляется, но нужен контекст для меню */
   z-index: 10;
   max-width: 1200px;
   margin: 0 auto;
@@ -45,6 +45,82 @@ nav a {
   transition: color 0.2s ease;
 }
 nav a:hover { color: var(--primary); }
+
+.menu-toggle {
+  display: none;
+  border: none;
+  background: transparent;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-left: auto;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.menu-toggle:focus-visible { outline: 3px solid rgba(0,76,153,.35); outline-offset: 3px; }
+.menu-toggle:hover { background: rgba(0, 76, 153, 0.08); box-shadow: 0 4px 14px rgba(0, 76, 153, 0.12); }
+.menu-toggle__bar {
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--dark);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+header.menu-open .menu-toggle__bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+header.menu-open .menu-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+header.menu-open .menu-toggle__bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  header { padding: 1rem 1.25rem; }
+  header.menu-ready {
+    align-items: stretch;
+  }
+  header.menu-ready .menu-toggle {
+    display: inline-flex;
+  }
+  header.menu-ready nav {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 1.25rem;
+    right: 1.25rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 14px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 76, 153, 0.12);
+    backdrop-filter: blur(12px);
+  }
+  header.menu-ready nav a {
+    margin: 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  header.menu-ready nav a:hover {
+    background: rgba(0, 76, 153, 0.1);
+  }
+  header.menu-ready nav a + a {
+    margin-top: 0;
+  }
+  header.menu-open nav {
+    display: flex;
+  }
+}
 
 /* Герой */
 .hero {
