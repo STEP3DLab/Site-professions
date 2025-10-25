@@ -360,4 +360,3 @@ async function loadProfessionPage() {
     root.innerHTML = `<p class="error">Ошибка загрузки данных. Проверьте доступ к таблице.</p>`;
   }
 }
-

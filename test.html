@@ -1,55 +1,6 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Тест профориентации — РГСУ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-
-  <!-- Шапка -->
-  <header>
-    <a href="index.html">
-      <img src="RGSU_logo.png" alt="РГСУ" />
-    </a>
-    <nav>
-      <a href="index.html">Главная</a>
-      <a href="test.html">Тест</a>
-      <a href="index.html#docs">Документация</a>
-    </nav>
-  </header>
-
-  <main class="test-page">
-    <section class="test-hero">
-      <h1>Профориентационный тест</h1>
-      <p>Ответьте на вопросы, и мы подберем для вас подходящие профессии!</p>
-    </section>
-
-    <section id="test-root" class="test-container glass">
-      <!-- Контент подставляется JS -->
-      <div class="test-loader">Загружаем вопросы…</div>
-      <noscript>Включите JavaScript, чтобы пройти тест.</noscript>
-    </section>
-
-    <section id="test-results" class="test-results">
-      <!-- Результаты теста (карточки профессий) подставляются через JS -->
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p>© 2025 Технопарк РГСУ | <a href="mailto:info@rgsu.net">info@rgsu.net</a></p>
-  </footer>
-
-  <script src="script.js"></script>
-
-  <!-- Конфигурация таблиц -->
-  <script>
-    // ID вашей Google Таблицы для теста
-    window.GSHEET_TEST_ID = "1eJyocvC47_MoC2fNYycTEjOxmPSxT7UM3-7Du9-dcEA";
-    window.SHEET_TEST_QUESTIONS = "Вопросы";
-    window.SHEET_TEST_RESULTS   = "Результаты";
-  </script>
 </body>
 </html>
