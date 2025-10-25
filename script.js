@@ -6,8 +6,22 @@ async function fetchGviz(sheetName) {
   const SHEET_ID = window.GSHEET_ID;
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url, { cache: "no-store" });
+
+  if (!res.ok) {
+    const err = new Error(`GViz request failed with ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+
   const text = await res.text();
-  const json = JSON.parse(text.substring(47).slice(0, -2));
+
+  const match = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?/s);
+  if (!match || !match[1]) {
+    console.error("Unexpected GViz payload", text.slice(0, 200));
+    throw new Error("GViz response format changed");
+  }
+
+  const json = JSON.parse(match[1]);
   return json.table;
 }
 
