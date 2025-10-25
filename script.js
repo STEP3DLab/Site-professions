@@ -84,28 +84,57 @@ async function renderGroups() {
         ${desc ? `<p>${safe(desc)}</p>` : ""}
       `;
 
+      const smoothScrollToCard = () => {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const block = isMobile ? "start" : "center";
+
+        card.scrollIntoView({
+          behavior: prefersReducedMotion ? "instant" : "smooth",
+          block,
+          inline: "nearest"
+        });
+
+        if (prefersReducedMotion) return Promise.resolve();
+
+        return new Promise(resolve => {
+          let lastY = window.scrollY;
+          let stableFrames = 0;
+          let totalFrames = 0;
+          const maxFrames = 45; // ~750ms at 60fps
+          let done = false;
+          const check = () => {
+            if (done) return;
+            totalFrames += 1;
+            const currentY = window.scrollY;
+            if (Math.abs(currentY - lastY) < 1) {
+              stableFrames += 1;
+            } else {
+              stableFrames = 0;
+              lastY = currentY;
+            }
+
+            if (stableFrames > 5 || totalFrames >= maxFrames) {
+              done = true;
+              resolve();
+              return;
+            }
+            requestAnimationFrame(check);
+          };
+
+          requestAnimationFrame(check);
+        });
+      };
+
       const toggle = async () => {
         const expanded = card.classList.toggle("expanded");
         card.setAttribute("aria-expanded", expanded ? "true" : "false");
 
-        const scrollToCard = () => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              const isMobile = window.matchMedia("(max-width: 768px)").matches;
-              const block = isMobile ? "start" : "center";
-              card.scrollIntoView({ behavior: "smooth", block, inline: "nearest" });
-            });
-          });
-        };
-
         const exists = card.querySelector(".prof-list");
         if (!expanded && exists) { exists.remove(); return; }
 
-        if (expanded) {
-          scrollToCard();
-        }
-
         if (expanded && !exists) {
+          await smoothScrollToCard();
           const list = document.createElement("div");
           list.className = "prof-list";
           list.innerHTML = `<div class="groups-loader">Загружаем профессии…</div>`;
@@ -139,8 +168,8 @@ async function renderGroups() {
               Пока нет данных по профессиям этой группы.
             </div>`;
           }
-
-          scrollToCard();
+        } else if (expanded) {
+          await smoothScrollToCard();
         }
       };
 
