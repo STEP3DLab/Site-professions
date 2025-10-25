@@ -323,3 +323,61 @@ button:focus-visible,
   .prof-title { font-size: 1.7rem; }
   .profession-card { padding: 1.2rem 1rem 1.3rem; }
 }
+/* ===== Тест: оформление ===== */
+.test-page { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+.test-hero { text-align: center; padding: 2rem 1rem 1rem; }
+.test-hero h1 { color: var(--primary); font-weight: 800; margin: 0 0 .4rem; }
+
+.test-container.glass {
+  margin: 1rem auto 2rem;
+  padding: 1.2rem 1.2rem 1.4rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 28px rgba(17,17,17,.08);
+  border: 1px solid rgba(255,255,255,.35);
+}
+
+.test-loader { text-align:center; padding: 1.2rem; opacity: .8; }
+
+.test-progress {
+  display:flex; align-items:center; gap:.8rem; margin-bottom: .8rem;
+  font-weight:700; color:#2b3a4e;
+}
+.test-bar {
+  flex:1; height:10px; background:rgba(0,0,0,.06); border-radius:999px; overflow:hidden;
+}
+.test-bar > span {
+  display:block; height:100%; width:0%;
+  background: linear-gradient(90deg, #4e9cff, #2f70d9);
+  transition: width .25s ease;
+}
+
+.q-card { padding: .8rem 0 .4rem; }
+.q-title { font-size: 1.15rem; font-weight: 800; color:#2b3a4e; margin:0 0 .8rem; }
+
+.q-options { display:grid; gap:.6rem; }
+.q-option {
+  background: rgba(255,255,255,.9);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:12px;
+  padding:.85rem 1rem;
+  cursor:pointer;
+  transition: transform .1s ease, box-shadow .2s ease, border-color .2s ease, background .2s;
+}
+.q-option:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+.q-option.selected {
+  border-color: rgba(0,76,153,.35);
+  background: linear-gradient(180deg, rgba(0,76,153,.06), rgba(255,255,255,.95));
+  box-shadow: 0 8px 22px rgba(0,76,153,.12);
+}
+
+.test-actions {
+  display:flex; gap:.6rem; justify-content:space-between; margin-top:1rem;
+}
+.test-actions .btn { padding:.7rem 1rem; }
+
+.test-results { margin: 0 auto 2rem; max-width: 1200px; padding: 0 1rem; }
+.test-results h2 { margin:.4rem 0 1rem; color: var(--primary); }
+
+/* используется уже существующая .prof-list и .prof-card */
