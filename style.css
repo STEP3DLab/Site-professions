@@ -20,12 +20,18 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1rem 2rem;
   background: transparent;          /* <— фон как у сайта */
   backdrop-filter: none;
   border-bottom: none;
-  position: static;                 /* <— не закрепляется */
-  z-index: 10;
+  position: relative;
+  z-index: 20;
+}
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
 }
 header img {
   height: 48px;
@@ -33,14 +39,90 @@ header img {
 }
 header img:hover { transform: scale(1.05); }
 
-nav a {
-  margin-left: 1.2rem;
+header nav a {
   text-decoration: none;
   color: var(--dark);
   font-weight: 600;
   transition: color 0.2s ease;
 }
-nav a:hover { color: var(--primary); }
+header nav a:hover { color: var(--primary); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 76, 153, 0.15);
+  background: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.menu-toggle:focus-visible,
+.menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 18px rgba(0, 76, 153, 0.2);
+}
+.menu-toggle__bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--dark);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle__bar + .menu-toggle__bar { margin-top: 4px; }
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(2) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(3) {
+  opacity: 0;
+}
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(4) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 0.9rem 1.5rem;
+  }
+  header nav {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: min(240px, 85vw);
+    z-index: 20;
+  }
+  header nav[data-open="true"] {
+    display: flex;
+  }
+  header nav a {
+    margin: 0;
+    width: 100%;
+  }
+  .menu-toggle {
+    display: inline-flex;
+  }
+}
 
 /* Герой */
 .hero {
@@ -301,6 +383,46 @@ button:focus-visible,
 .to-top--visible { opacity: 1; pointer-events: auto; }
 
 /* Мобильная адаптация */
+@media (max-width: 900px) {
+  header {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  header nav {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    right: 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+    min-width: min(280px, 80vw);
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  header nav[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  header nav a {
+    margin: 0;
+    padding: 0.35rem 0;
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 640px) {
   .prof-title { font-size: 1.7rem; }
   .profession-card { padding: 1.2rem 1rem 1.3rem; }

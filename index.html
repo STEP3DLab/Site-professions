@@ -16,7 +16,19 @@
     <a href="https://rgsu.net" target="_blank" aria-label="Сайт РГСУ">
       <img src="RGSU_logo.png" alt="РГСУ" />
     </a>
-    <nav>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="siteNav"
+      aria-label="Открыть меню"
+    >
+      <span class="sr-only">Меню</span>
+      <span class="menu-toggle__bar"></span>
+      <span class="menu-toggle__bar"></span>
+      <span class="menu-toggle__bar"></span>
+    </button>
+    <nav id="siteNav" aria-label="Основные разделы" data-open="false">
       <a href="#top">Главная</a>
       <a href="test.html">Тест</a>
       <a href="#groups">Профессии</a>

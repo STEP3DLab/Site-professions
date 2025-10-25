@@ -32,6 +32,60 @@ function gvizToObjects(table) {
 let professionsCache = null;
 let groupsCache = null;
 
+function initMobileMenu() {
+  const toggle = document.querySelector(".menu-toggle");
+  const nav = document.getElementById("siteNav");
+  if (!toggle || !nav) return;
+
+  const closeMenu = () => {
+    nav.dataset.open = "false";
+    toggle.setAttribute("aria-expanded", "false");
+  };
+
+  const openMenu = () => {
+    nav.dataset.open = "true";
+    toggle.setAttribute("aria-expanded", "true");
+  };
+
+  const toggleMenu = () => {
+    if (nav.dataset.open === "true") closeMenu();
+    else openMenu();
+  };
+
+  const handleOutside = event => {
+    if (nav.dataset.open !== "true") return;
+    if (event.target === toggle || toggle.contains(event.target)) return;
+    if (nav.contains(event.target)) return;
+    closeMenu();
+  };
+
+  const handleKey = event => {
+    if (event.key === "Escape" && nav.dataset.open === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  };
+
+  const mq = window.matchMedia("(max-width: 900px)");
+  const sync = () => {
+    if (!mq.matches) {
+      closeMenu();
+    }
+  };
+
+  toggle.addEventListener("click", toggleMenu);
+  nav.addEventListener("click", event => {
+    if (event.target instanceof HTMLElement && event.target.tagName === "A") {
+      closeMenu();
+    }
+  });
+  document.addEventListener("click", handleOutside);
+  document.addEventListener("keydown", handleKey);
+  if (typeof mq.addEventListener === "function") mq.addEventListener("change", sync);
+  else if (typeof mq.addListener === "function") mq.addListener(sync);
+  sync();
+}
+
 async function getProfessions() {
   if (professionsCache) return professionsCache;
   const table = await fetchGviz(window.SHEET_PROFESSIONS || "Профессии");
@@ -63,14 +117,13 @@ async function renderGroups() {
   wrap.innerHTML = `<div class="groups-loader">Загружаем группы…</div>`;
 
   try {
-    const table = await fetchGviz(window.SHEET_GROUPS || "Группы");
-    const groups = gvizToObjects(table);
+    const groups = await getGroups();
     wrap.innerHTML = "";
 
     groups.forEach(g => {
-      const id = g["ID группы"] || g["ID"] || "";
-      const title = g["Название группы"] || g["Название"] || "Без названия";
-      const desc = g["Описание"] || "";
+      const id = g.id;
+      const title = g.name || "Без названия";
+      const desc = g.desc || "";
 
       const card = document.createElement("div");
       card.className = "group-card";
@@ -176,6 +229,7 @@ function initToTop() {
 
 /* Инициализация главной */
 document.addEventListener("DOMContentLoaded", () => {
+  initMobileMenu();
   renderGroups();
   initToTop();
 });
@@ -210,52 +264,50 @@ async function loadProfessionPage() {
     const groupName = group ? group.name : "Группа не найдена";
 
     const title = safe(prof["Название профессии"]);
-    const short = safe(prof["Описание"]);
+    const short = safe(prof["Описание"] || prof["Краткое описание"]);
     const about = safe(prof["Общее описание"]);
     const roles = safe(prof["Примеры ролей и трудовых функций"]);
     const skills = safe(prof["Ключевые компетенции / навыки"]);
     const recs  = safe(prof["Рекомендации"]);
 
     root.innerHTML = `
-      <main class="profession-page">
-        <article class="profession-card glass" id="prof-card">
-          <header class="prof-header">
-            <h1 class="prof-title">${title}</h1>
-            <p class="prof-group-name">${safe(groupName)}</p>
-          </header>
+      <article class="profession-card glass" id="prof-card">
+        <header class="prof-header">
+          <h1 class="prof-title">${title}</h1>
+          <p class="prof-group-name">${safe(groupName)}</p>
+        </header>
 
-          <section class="prof-section">
-            <h2>Описание</h2>
-            ${(() => {
-              const blocks = [];
-              if (short) blocks.push(`<p class="prof-short">${short}</p>`);
-              if (about) blocks.push(`<p>${about}</p>`);
-              if (!blocks.length) blocks.push(`<p>—</p>`);
-              return blocks.join("");
-            })()}
-          </section>
+        <section class="prof-section">
+          <h2>Описание</h2>
+          ${(() => {
+            const blocks = [];
+            if (short) blocks.push(`<p class="prof-short">${short}</p>`);
+            if (about) blocks.push(`<p>${about}</p>`);
+            if (!blocks.length) blocks.push(`<p>—</p>`);
+            return blocks.join("");
+          })()}
+        </section>
 
-          <section class="prof-section">
-            <h2>Примеры ролей и трудовых функций</h2>
-            <p>${roles || "—"}</p>
-          </section>
+        <section class="prof-section">
+          <h2>Примеры ролей и трудовых функций</h2>
+          <p>${roles || "—"}</p>
+        </section>
 
-          <section class="prof-section">
-            <h2>Ключевые компетенции / навыки</h2>
-            <p>${skills || "—"}</p>
-          </section>
+        <section class="prof-section">
+          <h2>Ключевые компетенции / навыки</h2>
+          <p>${skills || "—"}</p>
+        </section>
 
-          ${recs ? `
-          <aside class="prof-recommend">
-            <div class="rec-title">Рекомендации</div>
-            <div class="rec-body">${recs}</div>
-          </aside>` : ``}
+        ${recs ? `
+        <aside class="prof-recommend">
+          <div class="rec-title">Рекомендации</div>
+          <div class="rec-body">${recs}</div>
+        </aside>` : ``}
 
-          <div class="prof-nav">
-            <a class="btn" href="index.html#groups">← К списку групп</a>
-          </div>
-        </article>
-      </main>
+        <div class="prof-nav">
+          <a class="btn" href="index.html#groups">← К списку групп</a>
+        </div>
+      </article>
     `;
 
     const card = document.getElementById("prof-card");
