@@ -221,16 +221,18 @@ async function loadProfessionPage() {
         <article class="profession-card glass" id="prof-card">
           <header class="prof-header">
             <h1 class="prof-title">${title}</h1>
-            <div class="prof-group">
-              <span class="group-chip">Группа:</span>
-              <span class="group-name">${safe(groupName)}</span>
-            </div>
-            ${short ? `<p class="prof-short">${short}</p>` : ``}
+            <p class="prof-group-name">${safe(groupName)}</p>
           </header>
 
           <section class="prof-section">
-            <h2>Общее описание</h2>
-            <p>${about || "—"}</p>
+            <h2>Описание</h2>
+            ${(() => {
+              const blocks = [];
+              if (short) blocks.push(`<p class="prof-short">${short}</p>`);
+              if (about) blocks.push(`<p>${about}</p>`);
+              if (!blocks.length) blocks.push(`<p>—</p>`);
+              return blocks.join("");
+            })()}
           </section>
 
           <section class="prof-section">
