@@ -226,6 +226,63 @@ function initToTop() {
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
+function prepareProfessionHeader() {
+  if (!document.getElementById("profession")) return;
+
+  const header = document.querySelector("header");
+  if (!header) return;
+
+  const nav = header.querySelector("nav");
+  if (!nav) return;
+
+  const logoImg = header.querySelector("img");
+  const logoLink = logoImg ? logoImg.closest("a") : header.querySelector("a");
+  if (logoLink) {
+    logoLink.href = "https://rgsu.net";
+    logoLink.setAttribute("target", "_blank");
+    logoLink.setAttribute("rel", "noopener");
+    logoLink.setAttribute("aria-label", "Сайт РГСУ");
+  }
+
+  nav.id = "mainNav";
+
+  const links = [
+    { href: "index.html", text: "Главная" },
+    { href: "test.html", text: "Тест" },
+    { href: "index.html#groups", text: "Профессии" },
+    { href: "index.html#docs", text: "Документация" },
+    { href: "index.html#contacts", text: "Контакты" }
+  ];
+
+  nav.innerHTML = "";
+  links.forEach(({ href, text }) => {
+    const link = document.createElement("a");
+    link.href = href;
+    link.textContent = text;
+    nav.appendChild(link);
+  });
+
+  let toggle = header.querySelector(".menu-toggle");
+  if (!toggle) {
+    toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "menu-toggle";
+    toggle.setAttribute("aria-label", "Открыть меню");
+    toggle.setAttribute("aria-controls", "mainNav");
+    toggle.setAttribute("aria-expanded", "false");
+
+    for (let i = 0; i < 3; i += 1) {
+      const bar = document.createElement("span");
+      bar.className = "menu-toggle__bar";
+      toggle.appendChild(bar);
+    }
+
+    header.insertBefore(toggle, nav);
+  } else {
+    toggle.setAttribute("aria-controls", "mainNav");
+  }
+}
+
 function initMobileMenu() {
   const header = document.querySelector("header");
   if (!header) return;
@@ -283,6 +340,7 @@ function initMobileMenu() {
 document.addEventListener("DOMContentLoaded", () => {
   renderGroups();
   initToTop();
+  prepareProfessionHeader();
   initMobileMenu();
 });
 
