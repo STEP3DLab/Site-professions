@@ -88,8 +88,22 @@ async function renderGroups() {
         const expanded = card.classList.toggle("expanded");
         card.setAttribute("aria-expanded", expanded ? "true" : "false");
 
+        const scrollToCard = () => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const isMobile = window.matchMedia("(max-width: 768px)").matches;
+              const block = isMobile ? "start" : "center";
+              card.scrollIntoView({ behavior: "smooth", block, inline: "nearest" });
+            });
+          });
+        };
+
         const exists = card.querySelector(".prof-list");
         if (!expanded && exists) { exists.remove(); return; }
+
+        if (expanded) {
+          scrollToCard();
+        }
 
         if (expanded && !exists) {
           const list = document.createElement("div");
@@ -126,18 +140,7 @@ async function renderGroups() {
             </div>`;
           }
 
-          // Центрируем раскрытую карточку (только на широких экранах)
-          setTimeout(() => {
-            const isMobile = window.matchMedia("(max-width: 768px)").matches;
-            if (isMobile) {
-              card.scrollIntoView({ behavior: "smooth", block: "start" });
-              return;
-            }
-
-            const rect = card.getBoundingClientRect();
-            const scrollY = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
-            window.scrollTo({ top: scrollY, behavior: "smooth" });
-          }, 300);
+          scrollToCard();
         }
       };
 
