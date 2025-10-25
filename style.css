@@ -233,7 +233,11 @@ footer a { color: #fff; text-decoration: underline; }
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.prof-header { margin-bottom: 1.2rem; }
+.prof-header {
+  margin-bottom: 1.2rem;
+  padding: 0;
+  display: block;
+}
 .prof-title {
   font-size: 2.2rem;
   line-height: 1.25;
@@ -247,11 +251,16 @@ footer a { color: #fff; text-decoration: underline; }
   color: var(--primary);
   opacity: .85;
 }
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   .prof-header {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
   }
+}
 
+@media (max-width: 768px) {
   .prof-group-name {
     margin: 0.25rem 0 0;
   }
