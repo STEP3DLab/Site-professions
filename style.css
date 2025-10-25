@@ -32,7 +32,7 @@ header {
   box-sizing: border-box;
 }
 header img {
-  height: 48px;
+  height: 96px;
   transition: transform 0.2s ease;
 }
 header img:hover { transform: scale(1.05); }
