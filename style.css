@@ -238,6 +238,15 @@ footer a { color: #fff; text-decoration: underline; }
   color: var(--primary);
   opacity: .85;
 }
+@media (max-width: 768px) {
+  .prof-header {
+    display: block;
+  }
+
+  .prof-group-name {
+    margin: 0.25rem 0 0;
+  }
+}
 .prof-short {
   font-size: 1.06rem;
   opacity: .95;

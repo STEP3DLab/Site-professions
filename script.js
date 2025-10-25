@@ -126,8 +126,14 @@ async function renderGroups() {
             </div>`;
           }
 
-          // Центрируем раскрытую карточку
+          // Центрируем раскрытую карточку (только на широких экранах)
           setTimeout(() => {
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+            if (isMobile) {
+              card.scrollIntoView({ behavior: "smooth", block: "start" });
+              return;
+            }
+
             const rect = card.getBoundingClientRect();
             const scrollY = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
             window.scrollTo({ top: scrollY, behavior: "smooth" });
