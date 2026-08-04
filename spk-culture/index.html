@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#153E73">
+  <meta name="description" content="Интерактивный прототип официального сайта Совета по профессиональным квалификациям в сфере культуры и креативных индустрий">
+  <title>СПК в сфере культуры и креативных индустрий — прототип</title>
+  <style>
+    html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#071b35;color:#fff}
+    .boot{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px;box-sizing:border-box;background:radial-gradient(circle at 50% 30%,#194d81 0,#071b35 64%)}
+    .boot i{display:block;width:42px;height:42px;margin:0 auto 18px;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:s .8s linear infinite}
+    .boot strong{font-size:20px}.boot p{max-width:560px;color:rgba(255,255,255,.76);line-height:1.55}
+    @keyframes s{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="boot"><div><i></i><strong>Загрузка интерактивного прототипа…</strong></div></div>
+  <script>
+    (async()=>{
+      try{
+        if(!('DecompressionStream' in window)) throw new Error('Браузер не поддерживает распаковку данных');
+        const names=Array.from({length:11},(_,i)=>`data/${String(i).padStart(2,'0')}.txt`);
+        const parts=await Promise.all(names.map(async n=>{
+          const r=await fetch(n,{cache:'no-store'});
+          if(!r.ok) throw new Error(`Не загружен ${n}`);
+          return r.text();
+        }));
+        const encoded=parts.join('').replace(/\s+/g,'');
+        const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
+        const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+        const html=await new Response(stream).text();
+        document.open();
+        document.write(html);
+        document.close();
+      }catch(error){
+        document.body.innerHTML='<div class="boot"><div><strong>Не удалось открыть прототип</strong><p>Обновите браузер до актуальной версии Chrome, Edge, Firefox или Safari и перезагрузите страницу.</p></div></div>';
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
