@@ -1,0 +1,71 @@
+name: Deploy SPK site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'spk-creative-industries-final/**'
+      - 'spk-creative-industries-brand-v3/**'
+      - 'spk-creative-industries-release/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare static site
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp -R spk-creative-industries-final _site/
+          cp -R spk-creative-industries-brand-v3 _site/
+          cp -R spk-creative-industries-release _site/
+          touch _site/.nojekyll
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="ru">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=./spk-creative-industries-release/">
+            <title>СПК ККИ</title>
+            <link rel="canonical" href="./spk-creative-industries-release/">
+          </head>
+          <body>
+            <p><a href="./spk-creative-industries-release/">Открыть сайт СПК ККИ</a></p>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
